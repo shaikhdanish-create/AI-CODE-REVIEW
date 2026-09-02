@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -77,11 +78,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "PyReview — AI Python Code Review" },
+      {
+        name: "description",
+        content:
+          "Analyze Python code for bugs, security risks, performance and PEP 8 style, with an AI review and a 0-100 quality score.",
+      },
+      { property: "og:title", content: "PyReview — AI Python Code Review" },
+      {
+        property: "og:description",
+        content:
+          "Static analysis plus AI review for Python: bugs, security, performance, style and a quality score.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -92,6 +100,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -120,7 +134,35 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="min-h-screen bg-background font-sans text-foreground">
+        <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <Link to="/" className="flex items-center gap-2 font-mono text-sm font-bold tracking-tight">
+              <span className="rounded bg-primary px-1.5 py-0.5 text-primary-foreground">py</span>
+              <span>review</span>
+            </Link>
+            <nav className="flex items-center gap-1 text-sm">
+              <Link
+                to="/"
+                activeOptions={{ exact: true }}
+                className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                activeProps={{ className: "bg-secondary text-foreground" }}
+              >
+                Analyzer
+              </Link>
+              <Link
+                to="/history"
+                className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                activeProps={{ className: "bg-secondary text-foreground" }}
+              >
+                History
+              </Link>
+            </nav>
+          </div>
+        </header>
+        <Outlet />
+        <Toaster position="top-right" />
+      </div>
     </QueryClientProvider>
   );
 }
