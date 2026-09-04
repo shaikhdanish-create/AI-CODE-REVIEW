@@ -1,4 +1,4 @@
-# CodeBuddy AI
+# AI CODE REVIEW
 
 Build an AI Code Review System in Python
 
