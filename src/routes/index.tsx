@@ -86,15 +86,20 @@ function Analyzer() {
       setReport(full);
       setAnalyzedCode(code);
 
-      // 3. Persist to review history.
-      const { error } = await supabase.from("reviews").insert({
-        filename,
-        code,
-        score,
-        review_summary: ai.summary || "Static analysis only.",
-        report: full as unknown as Json,
-      });
-      if (error) toast.error("Review ran, but saving to history failed.");
+      // 3. Persist to review history (only for signed-in owners of the review).
+      if (!user) {
+        toast.info("Sign in to save this review to your private history.");
+      } else {
+        const { error } = await supabase.from("reviews").insert({
+          user_id: user.id,
+          filename,
+          code,
+          score,
+          review_summary: ai.summary || "Static analysis only.",
+          report: full as unknown as Json,
+        });
+        if (error) toast.error("Review ran, but saving to history failed.");
+      }
     } catch (error) {
       toast.error((error as Error).message || "Analysis failed.");
     } finally {
