@@ -81,7 +81,12 @@ function Dashboard() {
   });
 
   const rows = data ?? [];
-  const chartData = rows.map((r, i) => ({
+  const chartData: (Record<string, number> & {
+    label: string;
+    date: string;
+    filename: string;
+    score: number;
+  })[] = rows.map((r, i) => ({
     label: `#${i + 1}`,
     date: new Date(r.created_at).toLocaleDateString(),
     filename: r.filename,
