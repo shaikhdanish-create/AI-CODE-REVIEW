@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 import { aiReviewCode } from "@/lib/review.functions";
 import { computeScore, runStaticAnalysis } from "@/lib/static-analysis";
 
@@ -91,7 +92,7 @@ function Analyzer() {
         code,
         score,
         review_summary: ai.summary || "Static analysis only.",
-        report: full as unknown as Record<string, unknown>,
+        report: full as unknown as Json,
       });
       if (error) toast.error("Review ran, but saving to history failed.");
     } catch (error) {

@@ -89,7 +89,7 @@ function finding(
   source: string,
   risk?: Severity,
 ): Finding {
-  return { line, problem, explanation, fix, source, risk };
+  return { line, problem, explanation, fix, source, ...(risk ? { risk } : {}) };
 }
 
 /** Cheap syntax sanity check (unbalanced brackets, missing colons). */
@@ -126,7 +126,7 @@ function checkSyntax(lines: Line[]): Finding[] {
     }
   }
   if (stack.length) {
-    const top = stack[stack.length - 1];
+    const top = stack[stack.length - 1]!;
     out.push(finding(top.line, `Unclosed '${top.ch}'`, "This bracket is never closed.", "Close the bracket.", "syntax"));
   }
   return out;
@@ -142,7 +142,7 @@ function checkStructure(lines: Line[]): { bugs: Finding[]; best: Finding[] } {
     const t = l.text.trim();
 
     const def = t.match(/^def\s+([A-Za-z_]\w*)\s*\(/);
-    if (def) functions.push({ name: def[1], line: l.n, indent: l.indent });
+    if (def) functions.push({ name: def[1]!, line: l.n, indent: l.indent });
 
     if (/^except\s*:/.test(t)) {
       bugs.push(
@@ -260,9 +260,9 @@ function checkStyle(lines: Line[], code: string): Finding[] {
   lines.forEach((l) => {
     const m1 = l.text.match(/^\s*import\s+([A-Za-z_][\w.]*)/);
     const m2 = l.text.match(/^\s*from\s+[\w.]+\s+import\s+(.+)$/);
-    if (m1) imported.push({ name: m1[1].split(".")[0], line: l.n });
+    if (m1) imported.push({ name: m1[1]!.split(".")[0]!, line: l.n });
     if (m2) {
-      m2[1]
+      m2[1]!
         .split(",")
         .map((s) => s.trim().split(/\s+as\s+/).pop()!.trim())
         .filter((s) => s && s !== "*")
@@ -324,7 +324,7 @@ function measureComplexity(lines: Line[]): Complexity {
     const def = l.text.trim().match(/^def\s+([A-Za-z_]\w*)/);
     if (def) {
       if (current) functions.push(current);
-      current = { name: def[1], line: l.n, complexity: 1 };
+      current = { name: def[1]!, line: l.n, complexity: 1 };
       indentOfDef = l.indent;
       return;
     }
