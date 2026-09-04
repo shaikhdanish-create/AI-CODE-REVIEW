@@ -7,6 +7,7 @@ import { ReportView, type ReviewReport } from "@/components/review/report-view";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { aiReviewCode } from "@/lib/review.functions";
@@ -57,6 +58,7 @@ function Analyzer() {
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
   const runAiReview = useServerFn(aiReviewCode);
 
   async function handleFile(file: File) {
