@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -128,8 +130,34 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthNav() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+        activeProps={{ className: "bg-secondary text-foreground" }}
+      >
+        Sign in
+      </Link>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={() => void supabase.auth.signOut()}
+      className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+    >
+      Sign out
+    </button>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
 
   return (
     <QueryClientProvider client={queryClient}>
