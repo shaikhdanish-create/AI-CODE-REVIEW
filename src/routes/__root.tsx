@@ -164,7 +164,9 @@ function RootComponent() {
               >
                 History
               </Link>
+              <AuthNav />
             </nav>
+
           </div>
         </header>
         <Outlet />
