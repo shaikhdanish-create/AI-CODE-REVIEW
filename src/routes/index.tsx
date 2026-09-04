@@ -91,7 +91,7 @@ function Analyzer() {
         code,
         score,
         review_summary: ai.summary || "Static analysis only.",
-        report: full as unknown as Record<string, unknown>,
+        report: full as unknown as Json,
       });
       if (error) toast.error("Review ran, but saving to history failed.");
     } catch (error) {
