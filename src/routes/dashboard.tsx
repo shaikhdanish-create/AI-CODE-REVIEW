@@ -39,11 +39,11 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const CATEGORIES = [
-  { key: "bugs", label: "Bugs", color: "hsl(var(--destructive))" },
-  { key: "security", label: "Security", color: "hsl(var(--warning))" },
-  { key: "performance", label: "Performance", color: "hsl(var(--primary))" },
-  { key: "style", label: "Style", color: "hsl(var(--success))" },
-  { key: "bestPractices", label: "Best practices", color: "hsl(var(--muted-foreground))" },
+  { key: "bugs", label: "Bugs", color: "var(--destructive)" },
+  { key: "security", label: "Security", color: "var(--warning)" },
+  { key: "performance", label: "Performance", color: "var(--primary)" },
+  { key: "style", label: "Style", color: "var(--success)" },
+  { key: "bestPractices", label: "Best practices", color: "var(--muted-foreground)" },
 ] as const;
 
 type Row = {
@@ -132,13 +132,13 @@ function Dashboard() {
             <div className="mt-4 h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ left: -20, right: 8, top: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
                       borderRadius: 8,
                       fontSize: 12,
                     }}
@@ -147,7 +147,7 @@ function Dashboard() {
                   <Line
                     type="monotone"
                     dataKey="score"
-                    stroke="hsl(var(--primary))"
+                    stroke="var(--primary)"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                   />
@@ -163,13 +163,13 @@ function Dashboard() {
             <div className="mt-4 h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData} margin={{ left: -20, right: 8, top: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
                       borderRadius: 8,
                       fontSize: 12,
                     }}
