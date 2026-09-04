@@ -23,6 +23,7 @@ export type Database = {
           report: Json
           review_summary: string
           score: number
+          user_id: string | null
         }
         Insert: {
           code: string
@@ -32,6 +33,7 @@ export type Database = {
           report?: Json
           review_summary?: string
           score?: number
+          user_id?: string | null
         }
         Update: {
           code?: string
@@ -41,6 +43,7 @@ export type Database = {
           report?: Json
           review_summary?: string
           score?: number
+          user_id?: string | null
         }
         Relationships: []
       }
