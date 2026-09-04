@@ -91,7 +91,7 @@ function Dashboard() {
 
   const totals = CATEGORIES.map((c) => ({
     ...c,
-    count: chartData.reduce((a, d) => a + ((d as Record<string, number>)[c.key] ?? 0), 0),
+    count: chartData.reduce((a, d) => a + (d[c.key] ?? 0), 0),
   }));
   const avg =
     rows.length > 0 ? Math.round(rows.reduce((a, r) => a + r.score, 0) / rows.length) : 0;
