@@ -54,11 +54,17 @@ type Row = {
   report: unknown;
 };
 
-function counts(report: unknown) {
+type CatKey = (typeof CATEGORIES)[number]["key"];
+type ChartRow = { label: string; date: string; filename: string; score: number } & Record<
+  CatKey,
+  number
+>;
+
+function counts(report: unknown): Record<CatKey, number> {
   const s = (report as ReviewReport | null)?.static as
     | Record<string, unknown>
     | undefined;
-  const out: Record<string, number> = {};
+  const out = {} as Record<CatKey, number>;
   for (const c of CATEGORIES) {
     const v = s?.[c.key];
     out[c.key] = Array.isArray(v) ? v.length : 0;
@@ -81,12 +87,7 @@ function Dashboard() {
   });
 
   const rows = data ?? [];
-  const chartData: (Record<string, number> & {
-    label: string;
-    date: string;
-    filename: string;
-    score: number;
-  })[] = rows.map((r, i) => ({
+  const chartData: ChartRow[] = rows.map((r, i) => ({
     label: `#${i + 1}`,
     date: new Date(r.created_at).toLocaleDateString(),
     filename: r.filename,
