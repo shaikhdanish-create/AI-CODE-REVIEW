@@ -151,6 +151,13 @@ function RootComponent() {
                 Analyzer
               </Link>
               <Link
+                to="/dashboard"
+                className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                activeProps={{ className: "bg-secondary text-foreground" }}
+              >
+                Dashboard
+              </Link>
+              <Link
                 to="/history"
                 className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 activeProps={{ className: "bg-secondary text-foreground" }}
