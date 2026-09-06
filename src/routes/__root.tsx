@@ -159,7 +159,9 @@ function AuthNav() {
   }
 
   const displayName =
-    (user.user_metadata?.full_name as string | undefined) || user.email?.split("@")[0] || "Account";
+    (user.user_metadata?.["full_name"] as string | undefined) ||
+    user.email?.split("@")[0] ||
+    "Account";
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
