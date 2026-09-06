@@ -1,9 +1,10 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -132,32 +133,75 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function AuthNav() {
   const { user, loading } = useAuth();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   if (loading) return null;
+
   if (!user) {
     return (
-      <Link
-        to="/auth"
-        className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-        activeProps={{ className: "bg-secondary text-foreground" }}
-      >
-        Sign in
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link
+          to="/login"
+          className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          activeProps={{ className: "bg-secondary text-foreground" }}
+        >
+          Sign in
+        </Link>
+        <Link
+          to="/signup"
+          className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Sign up
+        </Link>
+      </div>
     );
   }
+
+  const displayName =
+    (user.user_metadata?.["full_name"] as string | undefined) ||
+    user.email?.split("@")[0] ||
+    "Account";
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/login", replace: true });
+  }
+
   return (
-    <button
-      type="button"
-      onClick={() => void supabase.auth.signOut()}
-      className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-    >
-      Sign out
-    </button>
+    <div className="flex items-center gap-2">
+      <span className="hidden max-w-[140px] truncate text-sm text-muted-foreground sm:inline">
+        {displayName}
+      </span>
+      <button
+        type="button"
+        onClick={() => void handleSignOut()}
+        className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      >
+        Sign out
+      </button>
+    </div>
   );
 }
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
 
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") {
+        queryClient.invalidateQueries();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
