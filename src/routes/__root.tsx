@@ -189,7 +189,6 @@ function AuthNav() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const rootQueryClient = useQueryClient();
 
   useEffect(() => {
     const {
@@ -198,11 +197,11 @@ function RootComponent() {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event !== "SIGNED_OUT") {
-        rootQueryClient.invalidateQueries();
+        queryClient.invalidateQueries();
       }
     });
     return () => subscription.unsubscribe();
-  }, [router, rootQueryClient]);
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
