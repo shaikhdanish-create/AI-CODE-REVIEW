@@ -16,7 +16,12 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required."),
 });
 
+const loginSearchSchema = z.object({
+  redirect: z.string().optional(),
+});
+
 export const Route = createFileRoute("/login")({
+  validateSearch: (search) => loginSearchSchema.parse(search),
   head: () => ({
     meta: [
       { title: "Sign in — PyReview" },
