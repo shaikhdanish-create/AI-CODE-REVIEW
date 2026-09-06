@@ -4,7 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ReportView, type ReviewReport } from "@/components/review/report-view";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/history/$id")({
+export const Route = createFileRoute("/_authenticated/history/$id")({
   head: () => ({
     meta: [
       { title: "Review detail — PyReview" },

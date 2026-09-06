@@ -10,29 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as HistoryIdRouteImport } from './routes/history.$id'
 import { Route as AuthenticatedHistoryIndexRouteImport } from './routes/_authenticated/history.index'
+import { Route as AuthenticatedHistoryIdRouteImport } from './routes/_authenticated/history.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/_authenticated/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HistoryIdRoute = HistoryIdRouteImport.update({
-  id: '/history/$id',
-  path: '/history/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedHistoryIndexRoute =
@@ -41,48 +30,48 @@ const AuthenticatedHistoryIndexRoute =
     path: '/history/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedHistoryIdRoute = AuthenticatedHistoryIdRouteImport.update({
+  id: '/_authenticated/history/$id',
+  path: '/history/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/history/$id': typeof AuthenticatedHistoryIdRoute
   '/history/': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/history/$id': typeof AuthenticatedHistoryIdRoute
   '/history': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/_authenticated/history/$id': typeof AuthenticatedHistoryIdRoute
   '/_authenticated/history/': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/history/$id' | '/history/'
+  fullPaths: '/' | '/dashboard' | '/history/$id' | '/history/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/history/$id' | '/history'
+  to: '/' | '/dashboard' | '/history/$id' | '/history'
   id:
     | '__root__'
     | '/'
-    | '/auth'
     | '/_authenticated/dashboard'
-    | '/history/$id'
+    | '/_authenticated/history/$id'
     | '/_authenticated/history/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  HistoryIdRoute: typeof HistoryIdRoute
+  AuthenticatedHistoryIdRoute: typeof AuthenticatedHistoryIdRoute
   AuthenticatedHistoryIndexRoute: typeof AuthenticatedHistoryIndexRoute
 }
 
@@ -95,25 +84,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/history/$id': {
-      id: '/history/$id'
-      path: '/history/$id'
-      fullPath: '/history/$id'
-      preLoaderRoute: typeof HistoryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/history/': {
@@ -123,14 +98,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/history/$id': {
+      id: '/_authenticated/history/$id'
+      path: '/history/$id'
+      fullPath: '/history/$id'
+      preLoaderRoute: typeof AuthenticatedHistoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  HistoryIdRoute: HistoryIdRoute,
+  AuthenticatedHistoryIdRoute: AuthenticatedHistoryIdRoute,
   AuthenticatedHistoryIndexRoute: AuthenticatedHistoryIndexRoute,
 }
 export const routeTree = rootRouteImport
