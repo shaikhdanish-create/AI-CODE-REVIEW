@@ -25,7 +25,12 @@ const signupSchema = z
     path: ["confirmPassword"],
   });
 
+const signupSearchSchema = z.object({
+  redirect: z.string().optional(),
+});
+
 export const Route = createFileRoute("/signup")({
+  validateSearch: (search) => signupSearchSchema.parse(search),
   head: () => ({
     meta: [
       { title: "Create account — PyReview" },
