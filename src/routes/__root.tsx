@@ -186,7 +186,21 @@ function AuthNav() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const rootQueryClient = useQueryClient();
 
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") {
+        rootQueryClient.invalidateQueries();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [router, rootQueryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
