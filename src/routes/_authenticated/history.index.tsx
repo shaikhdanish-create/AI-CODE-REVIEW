@@ -4,7 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/history/")({
+export const Route = createFileRoute("/_authenticated/history/")({
   head: () => ({
     meta: [
       { title: "Review history — PyReview" },
