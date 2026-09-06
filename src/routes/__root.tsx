@@ -133,26 +133,54 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function AuthNav() {
   const { user, loading } = useAuth();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   if (loading) return null;
+
   if (!user) {
     return (
-      <Link
-        to="/auth"
-        className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-        activeProps={{ className: "bg-secondary text-foreground" }}
-      >
-        Sign in
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link
+          to="/login"
+          className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          activeProps={{ className: "bg-secondary text-foreground" }}
+        >
+          Sign in
+        </Link>
+        <Link
+          to="/signup"
+          className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Sign up
+        </Link>
+      </div>
     );
   }
+
+  const displayName =
+    (user.user_metadata?.full_name as string | undefined) || user.email?.split("@")[0] || "Account";
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/login", replace: true });
+  }
+
   return (
-    <button
-      type="button"
-      onClick={() => void supabase.auth.signOut()}
-      className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-    >
-      Sign out
-    </button>
+    <div className="flex items-center gap-2">
+      <span className="hidden max-w-[140px] truncate text-sm text-muted-foreground sm:inline">
+        {displayName}
+      </span>
+      <button
+        type="button"
+        onClick={() => void handleSignOut()}
+        className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      >
+        Sign out
+      </button>
+    </div>
   );
 }
 
