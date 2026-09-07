@@ -82,7 +82,7 @@ function SignupPage() {
 
     setBusy(true);
     try {
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email: parsed.data.email,
         password: parsed.data.password,
         options: {
@@ -91,6 +91,10 @@ function SignupPage() {
         },
       });
       if (signUpError) throw signUpError;
+      if (data.session) {
+        navigate({ to: "/", replace: true });
+        return;
+      }
       setCreated(true);
     } catch (err) {
       const message = (err as Error).message || "Could not create account.";
