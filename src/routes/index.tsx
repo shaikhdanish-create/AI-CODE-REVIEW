@@ -79,6 +79,21 @@ function Analyzer() {
       // 1. Static analysis (bugs, security, performance, style, complexity).
       const staticResult = runStaticAnalysis(code);
 
+      // Show static findings straight away so the page never waits on the AI call.
+      setAnalyzedCode(code);
+      setReport({
+        static: staticResult,
+        ai: {
+          available: false,
+          summary: "",
+          aiScore: null,
+          notes: [],
+          improvedCode: "",
+          message: "AI review in progress…",
+        },
+        score: computeScore(staticResult, null),
+      });
+
       // 2. AI review runs on the server so the API key never reaches the browser.
       const ai = await runAiReview({ data: { code, filename } });
       if (!ai.available && ai.message) toast.warning(ai.message);
@@ -86,7 +101,7 @@ function Analyzer() {
       const score = computeScore(staticResult, ai.aiScore);
       const full: ReviewReport = { static: staticResult, ai, score };
       setReport(full);
-      setAnalyzedCode(code);
+
 
       // 3. Persist to review history (only for signed-in owners of the review).
       if (!user) {
